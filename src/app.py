@@ -25,7 +25,7 @@ from dash.dependencies import Input, Output
 import plotly.express as px
 import plotly.graph_objs as go
 
-df_full = pd.read_csv("https://raw.githubusercontent.com/anyelot/ML_project_render/blob/main/owid-energy-data.csv")
+df_full = pd.read_csv("https://raw.githubusercontent.com/anyelot/ML_project_render/main/owid-energy-data.csv")
 
 df_full.describe(include = object)
 
