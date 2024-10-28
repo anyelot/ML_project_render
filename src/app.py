@@ -37,6 +37,11 @@ app = dash.Dash(external_stylesheets=[xt_style])
 
 server = app.server # <- For Render
 
+app.layout = html.Div([
+    html.H1("Prueba de layout en Dash"),
+    html.P("Si ves este texto, el layout está funcionando.")
+])
+
 # Eliminamos filas que tengan NaN en las columnas 'country', 'year' o 'population'
 df = df_full.dropna(subset=['country', 'year', 'population'])
 
