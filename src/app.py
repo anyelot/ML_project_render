@@ -25,7 +25,10 @@ from dash.dependencies import Input, Output
 import plotly.express as px
 import plotly.graph_objs as go
 
-df_full = pd.read_csv("https://raw.githubusercontent.com/anyelot/ML_project_render/main/owid-energy-data.csv")
+try:
+    df_full = pd.read_csv("https://raw.githubusercontent.com/anyelot/ML_project_render/main/owid-energy-data.csv")
+except Exception as e:
+    print("Error al cargar el archivo CSV:", e)
 
 df_full.describe(include = object)
 
