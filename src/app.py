@@ -55,6 +55,71 @@ app.layout = html.Div([
     html.Div(id='tabs-content-example')
 ])
 
+# Función de callback para actualizar el contenido basado en la pestaña seleccionada
+@app.callback(Output('tabs-content-example', 'children'),
+              Input('tabs-example', 'value'))
+def render_content(tab):
+    if tab == 'tab-1':
+        return html.Div([
+            html.H3('Detección de Valores Atípicos'),
+            dcc.Graph(figure=create_box_plot_plotly(df_top10)),
+            html.H3('Detección de Valores Atípicos despues de la Imputación ARIMA'),
+            dcc.Graph(figure=create_box_plot_after_arima(df_no_outliers))
+        ])
+    elif tab == 'tab-2':
+        figs = generate_time_series_plots(df_filtered_range)  # Generar todas las gráficas
+        return html.Div([
+            html.H3('Imputación ARIMA'),
+            dcc.Graph(figure=figs[0]),  # Primera gráfica (biofuel_consumption)
+            dcc.Graph(figure=figs[1]),  # Segunda gráfica (hydro_consumption)
+            dcc.Graph(figure=figs[2]),  # Tercera gráfica (solar_consumption)
+            dcc.Graph(figure=figs[3]),
+            dcc.Graph(figure=figs[4]),
+            dcc.Graph(figure=figs[5]),
+        ])
+    elif tab == 'tab-3':
+        histograms = generate_histograms(df_filtered_range, df_no_outliers)
+        kruskal_table = create_kruskal_wallis_table()
+        return html.Div([
+            html.H3('Distribución de la Imputación - Kruskall Walls'),
+            dcc.Graph(figure=histograms[0]),  # Primer gráfico de biofuel_consumption
+            dcc.Graph(figure=histograms[1]),  # Segundo gráfico de hydro_consumption
+            dcc.Graph(figure=histograms[2]),  # Tercer gráfico de solar_consumption
+            dcc.Graph(figure=histograms[3]),
+            dcc.Graph(figure=histograms[4]), 
+            dcc.Graph(figure=histograms[5]),
+            html.H3('Distribución de la Imputación - Kruskall Walls'),
+            kruskal_table
+        ])
+    elif tab == 'tab-4':
+        renewable_plot = dcc.Graph(figure=create_renewable_energy_plot())
+        non_renewable_plot = dcc.Graph(figure=create_non_renewable_energy_plot())
+        return html.Div([
+            html.H3('Consumo de diferentes fuentes de energía'),
+            renewable_plot,
+            non_renewable_plot,
+            dcc.Graph(figure=plot_renewable_bar()),
+            dcc.Graph(figure=plot_non_renewable_bar()),
+            dcc.Graph(figure=plot_renewable_pie()),
+            dcc.Graph(figure=plot_non_renewable_pie())
+        ])
+    elif tab == 'tab-5':
+        return html.Div([
+            html.H3('Consumo de energía por países'),
+            dcc.Graph(figure=plot_map()),
+            dcc.Graph(figure=plot_top10_barchart()),
+            dcc.Graph(figure=plot_heatmap())
+        ])
+    elif tab == 'tab-6':
+        return html.Div([
+            html.H3('Evolución del porcentaje de energías renovables'),
+            dcc.Graph(figure=plot_percentage_consumption())
+        ])
+
+# Ejecutar la app
+if __name__ == '__main__':
+    app.run_server(debug=True, host='0.0.0.0', port=9000)
+
 # Eliminamos filas que tengan NaN en las columnas 'country', 'year' o 'population'
 df = df_full.dropna(subset=['country', 'year', 'population'])
 
@@ -643,67 +708,3 @@ app.layout = html.Div([
     html.Div(id='tabs-content-example')
 ])
 
-# Función de callback para actualizar el contenido basado en la pestaña seleccionada
-@app.callback(Output('tabs-content-example', 'children'),
-              Input('tabs-example', 'value'))
-def render_content(tab):
-    if tab == 'tab-1':
-        return html.Div([
-            html.H3('Detección de Valores Atípicos'),
-            dcc.Graph(figure=create_box_plot_plotly(df_top10)),
-            html.H3('Detección de Valores Atípicos despues de la Imputación ARIMA'),
-            dcc.Graph(figure=create_box_plot_after_arima(df_no_outliers))
-        ])
-    elif tab == 'tab-2':
-        figs = generate_time_series_plots(df_filtered_range)  # Generar todas las gráficas
-        return html.Div([
-            html.H3('Imputación ARIMA'),
-            dcc.Graph(figure=figs[0]),  # Primera gráfica (biofuel_consumption)
-            dcc.Graph(figure=figs[1]),  # Segunda gráfica (hydro_consumption)
-            dcc.Graph(figure=figs[2]),  # Tercera gráfica (solar_consumption)
-            dcc.Graph(figure=figs[3]),
-            dcc.Graph(figure=figs[4]),
-            dcc.Graph(figure=figs[5]),
-        ])
-    elif tab == 'tab-3':
-        histograms = generate_histograms(df_filtered_range, df_no_outliers)
-        kruskal_table = create_kruskal_wallis_table()
-        return html.Div([
-            html.H3('Distribución de la Imputación - Kruskall Walls'),
-            dcc.Graph(figure=histograms[0]),  # Primer gráfico de biofuel_consumption
-            dcc.Graph(figure=histograms[1]),  # Segundo gráfico de hydro_consumption
-            dcc.Graph(figure=histograms[2]),  # Tercer gráfico de solar_consumption
-            dcc.Graph(figure=histograms[3]),
-            dcc.Graph(figure=histograms[4]), 
-            dcc.Graph(figure=histograms[5]),
-            html.H3('Distribución de la Imputación - Kruskall Walls'),
-            kruskal_table
-        ])
-    elif tab == 'tab-4':
-        renewable_plot = dcc.Graph(figure=create_renewable_energy_plot())
-        non_renewable_plot = dcc.Graph(figure=create_non_renewable_energy_plot())
-        return html.Div([
-            html.H3('Consumo de diferentes fuentes de energía'),
-            renewable_plot,
-            non_renewable_plot,
-            dcc.Graph(figure=plot_renewable_bar()),
-            dcc.Graph(figure=plot_non_renewable_bar()),
-            dcc.Graph(figure=plot_renewable_pie()),
-            dcc.Graph(figure=plot_non_renewable_pie())
-        ])
-    elif tab == 'tab-5':
-        return html.Div([
-            html.H3('Consumo de energía por países'),
-            dcc.Graph(figure=plot_map()),
-            dcc.Graph(figure=plot_top10_barchart()),
-            dcc.Graph(figure=plot_heatmap())
-        ])
-    elif tab == 'tab-6':
-        return html.Div([
-            html.H3('Evolución del porcentaje de energías renovables'),
-            dcc.Graph(figure=plot_percentage_consumption())
-        ])
-
-# Ejecutar la app
-if __name__ == '__main__':
-    app.run_server(debug=True, host='0.0.0.0', port=9000)
