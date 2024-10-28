@@ -42,6 +42,19 @@ app.layout = html.Div([
     html.P("Si ves este texto, el layout está funcionando.")
 ])
 
+#Layout de la app
+app.layout = html.Div([
+    dcc.Tabs(id="tabs-example", value='tab-1', children=[
+        dcc.Tab(label='Detección de Valores Atípicos', value='tab-1'),
+        dcc.Tab(label='Imputación Arima', value='tab-2'),
+        dcc.Tab(label='Distribución de la Imputación - Kruskall Walls', value='tab-3'),
+        dcc.Tab(label='Consumo de diferentes fuentes de energía', value='tab-4'),
+        dcc.Tab(label='Consumo de energía por países', value='tab-5'),
+        dcc.Tab(label='Evolución del porcentaje de energías renovables', value='tab-6'),
+    ]),
+    html.Div(id='tabs-content-example')
+])
+
 # Eliminamos filas que tengan NaN en las columnas 'country', 'year' o 'population'
 df = df_full.dropna(subset=['country', 'year', 'population'])
 
