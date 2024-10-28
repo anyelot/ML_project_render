@@ -1,7 +1,7 @@
 import dash
 from dash import dcc
 from dash import html
-import dash_table
+from dash import dash_table
 import pandas as pd 
 import matplotlib.pyplot as plt
 import seaborn as sns
