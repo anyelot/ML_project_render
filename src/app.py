@@ -30,7 +30,7 @@ df_full = pd.read_csv("https://raw.githubusercontent.com/anyelot/ML_project_rend
 df_full.describe(include = object)
 
 xt_style = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css"
-app = dash.Dash(external_stylesheets=[ext_style])
+app = dash.Dash(external_stylesheets=[xt_style])
 
 server = app.server # <- For Render
 
